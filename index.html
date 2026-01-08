@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pomodoro Timer - Stay Focused</title>
+    <meta
+      name="description"
+      content="A beautiful and functional Pomodoro timer to boost your productivity with focus sessions and breaks."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="timer-card">
+        <header class="header">
+          <h1 class="title">Pomodoro Timer</h1>
+          <p class="subtitle">Stay focused, take breaks, achieve more</p>
+        </header>
+
+        <div class="day-controls">
+          <button class="btn btn-day-start" id="startDayBtn">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            Start Day
+          </button>
+          <button class="btn btn-day-end" id="endDayBtn" disabled>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            End Day
+          </button>
+        </div>
+
+        <div class="session-info">
+          <div class="info-item">
+            <span class="info-label">Sessions Today</span>
+            <span class="info-value" id="sessionsToday">0</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Long Breaks</span>
+            <span class="info-value" id="longBreaksToday">0</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Mode</span>
+            <span class="info-value mode-badge" id="currentMode">Ready</span>
+          </div>
+        </div>
+
+        <div class="timer-display">
+          <div class="timer-circle">
+            <svg class="progress-ring" width="280" height="280">
+              <circle class="progress-ring-bg" cx="140" cy="140" r="130"></circle>
+              <circle class="progress-ring-circle" cx="140" cy="140" r="130" id="progressCircle"></circle>
+            </svg>
+            <div class="timer-text">
+              <div class="time" id="timeDisplay">25:00</div>
+              <div class="timer-label" id="timerLabel">Focus Time</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="btn btn-primary" id="startBtn">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Start
+          </button>
+          <button class="btn btn-secondary" id="pauseBtn" disabled>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+            Pause
+          </button>
+          <button class="btn btn-secondary" id="resetBtn">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            Reset
+          </button>
+        </div>
+
+        <div class="settings">
+          <div class="settings-header">
+            <h2 class="settings-title">Settings</h2>
+            <button class="btn-icon-only" id="toggleSettings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path
+                  d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="settings-content" id="settingsContent">
+            <div class="input-group">
+              <label for="sessionsInput" class="input-label">
+                Sessions before long break
+                <span class="input-hint">How many focus sessions before a 30-minute break?</span>
+              </label>
+              <input type="number" id="sessionsInput" class="input-field" min="1" max="10" value="4" />
+            </div>
+            <button class="btn btn-accent" id="saveSettings">Save Settings</button>
+
+            <div class="info-box" style="margin-top: 20px">
+              <h3 class="info-box-title">📅 How It Works</h3>
+              <ul class="info-list">
+                <li><strong>Start Day:</strong> Begin tracking your productivity</li>
+                <li><strong>Sessions:</strong> 25 min focus + 5 min break</li>
+                <li><strong>Long Break:</strong> Configurable above (default: 4 sessions)</li>
+                <li><strong>End Day:</strong> View your complete summary</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-bar">
+          <div class="progress-bar-fill" id="sessionProgress"></div>
+        </div>
+        <p class="progress-text" id="progressText">Start your day to begin tracking</p>
+      </div>
+    </div>
+
+    <div class="notification" id="notification">
+      <div class="notification-content">
+        <span class="notification-icon">🎉</span>
+        <span class="notification-text" id="notificationText"></span>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="summaryModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2 class="modal-title">🎯 Day Summary</h2>
+          <button class="btn-close" id="closeSummary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="summary-stats">
+            <div class="stat-card">
+              <div class="stat-icon">🔥</div>
+              <div class="stat-value" id="summaryTotalSessions">0</div>
+              <div class="stat-label">Focus Sessions</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">☕</div>
+              <div class="stat-value" id="summaryShortBreaks">0</div>
+              <div class="stat-label">Short Breaks</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">🌴</div>
+              <div class="stat-value" id="summaryLongBreaks">0</div>
+              <div class="stat-label">Long Breaks</div>
+            </div>
+          </div>
+          <div class="summary-time">
+            <div class="time-stat">
+              <span class="time-label">Total Focus Time:</span>
+              <span class="time-value" id="summaryFocusTime">0h 0m</span>
+            </div>
+            <div class="time-stat">
+              <span class="time-label">Day Started:</span>
+              <span class="time-value" id="summaryStartTime">--:--</span>
+            </div>
+            <div class="time-stat">
+              <span class="time-label">Day Ended:</span>
+              <span class="time-value" id="summaryEndTime">--:--</span>
+            </div>
+          </div>
+          <div class="summary-message" id="summaryMessage">Great work today! Keep up the momentum! 💪</div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" id="startNewDay">Start New Day</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
