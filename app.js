@@ -13,6 +13,7 @@ class PomodoroTimer {
     this.isRunning = false;
     this.currentMode = 'ready'; // 'ready', 'focus', 'shortBreak', 'longBreak'
     this.timerInterval = null;
+    this.autoProgress = false; // Auto-progress to next session
 
     // Day tracking
     this.dayActive = false;
@@ -44,6 +45,7 @@ class PomodoroTimer {
     this.settingsContent = document.getElementById('settingsContent');
     this.saveSettingsBtn = document.getElementById('saveSettings');
     this.sessionsInput = document.getElementById('sessionsInput');
+    this.autoProgressToggle = document.getElementById('autoProgressToggle');
 
     // Modal elements
     this.summaryModal = document.getElementById('summaryModal');
@@ -123,9 +125,11 @@ class PomodoroTimer {
     const newSessions = parseInt(this.sessionsInput.value);
     if (newSessions >= 1 && newSessions <= 10) {
       this.SESSIONS_BEFORE_LONG_BREAK = newSessions;
+      this.autoProgress = this.autoProgressToggle.checked;
       this.updateDayInfo();
       this.saveState();
-      this.showNotification('Settings saved! Long break after ' + newSessions + ' sessions ⚙️');
+      const autoMsg = this.autoProgress ? ' Auto-progress enabled! 🚀' : '';
+      this.showNotification('Settings saved! Long break after ' + newSessions + ' sessions ⚙️' + autoMsg);
     } else {
       this.showNotification('Please enter a value between 1 and 10 ⚠️');
     }
@@ -284,6 +288,13 @@ class PomodoroTimer {
 
     this.updateDayInfo();
     this.saveState();
+
+    // Auto-start next session if enabled
+    if (this.autoProgress && this.dayActive) {
+      setTimeout(() => {
+        this.start();
+      }, 1000); // 1 second delay before auto-starting
+    }
   }
 
   switchMode(mode) {
@@ -394,6 +405,7 @@ class PomodoroTimer {
       completedLongBreaks: this.completedLongBreaks,
       sessionsSinceLastLongBreak: this.sessionsSinceLastLongBreak,
       sessionsBeforeLongBreak: this.SESSIONS_BEFORE_LONG_BREAK,
+      autoProgress: this.autoProgress,
       lastUpdate: Date.now(),
     };
 
@@ -422,6 +434,12 @@ class PomodoroTimer {
       if (state.sessionsBeforeLongBreak) {
         this.SESSIONS_BEFORE_LONG_BREAK = state.sessionsBeforeLongBreak;
         this.sessionsInput.value = state.sessionsBeforeLongBreak;
+      }
+
+      // Restore auto-progress setting
+      if (state.autoProgress !== undefined) {
+        this.autoProgress = state.autoProgress;
+        this.autoProgressToggle.checked = state.autoProgress;
       }
 
       // Update button states
