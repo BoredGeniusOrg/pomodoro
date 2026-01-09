@@ -2,7 +2,7 @@
 class PomodoroTimer {
   constructor() {
     // Timer constants (in seconds)
-    this.FOCUS_TIME = 25 * 60; // 25 minutes
+    this.FOCUS_TIME = 1 * 60; // 25 minutes
     this.SHORT_BREAK = 5 * 60; // 5 minutes
     this.LONG_BREAK = 30 * 60; // 30 minutes
     this.SESSIONS_BEFORE_LONG_BREAK = 4;
@@ -157,6 +157,11 @@ class PomodoroTimer {
       this.pause();
     }
 
+    // Reset day state before showing summary
+    this.dayActive = false;
+    this.startDayBtn.disabled = false;
+    this.endDayBtn.disabled = true;
+
     this.showSummary();
     this.saveState();
   }
@@ -196,14 +201,23 @@ class PomodoroTimer {
 
   startNewDay() {
     this.closeSummary();
+
+    // Reset all day tracking
     this.dayActive = false;
+    this.dayStartTime = null;
+    this.completedFocusSessions = 0;
+    this.completedShortBreaks = 0;
+    this.completedLongBreaks = 0;
+    this.sessionsSinceLastLongBreak = 0;
+
+    // Reset button states
     this.startDayBtn.disabled = false;
     this.endDayBtn.disabled = true;
-    this.currentMode = 'ready';
-    this.timeRemaining = this.FOCUS_TIME;
-    this.totalTime = this.FOCUS_TIME;
-    this.timerLabel.textContent = 'Ready to Start';
-    this.currentModeDisplay.textContent = 'Ready';
+
+    // Switch to ready mode
+    this.switchMode('ready');
+
+    // Update displays
     this.updateDisplay();
     this.updateDayInfo();
     this.saveState();
