@@ -2,7 +2,7 @@
 class PomodoroTimer {
   constructor() {
     // Timer constants (in seconds)
-    this.FOCUS_TIME = 1 * 60; // 25 minutes
+    this.FOCUS_TIME = 25 * 60; // 25 minutes
     this.SHORT_BREAK = 5 * 60; // 5 minutes
     this.LONG_BREAK = 30 * 60; // 30 minutes
     this.SESSIONS_BEFORE_LONG_BREAK = 4;
